@@ -54,7 +54,13 @@
   <div class="container grid grid--2" style="align-items:flex-start; gap:60px;">
     <div class="reveal">
       <div id="form-success" class="form-success">Thanks! Your message has been received &mdash; our team will reach out within one business day.</div>
+      <div id="form-error" class="form-success" style="display:none; background:#fbeaea; border-color:#c0392b; color:#c0392b;">Something went wrong sending your message. Please email us directly at <a href="mailto:hello@meridianpublishinghouse.com" style="color:#c0392b; text-decoration:underline;">hello@meridianpublishinghouse.com</a>.</div>
       <form id="contact-form">
+        <!-- Get a free access key at https://web3forms.com and paste it below to make this form send real emails -->
+        <input type="hidden" name="access_key" value="307f2c89-419b-497c-bf96-809ca13726a1">
+        <input type="hidden" name="subject" value="New Book Inquiry &mdash; Meridian Publishing House Website">
+        <input type="hidden" name="from_name" value="Meridian Website Contact Form">
+        <input type="checkbox" name="botcheck" style="display:none;" tabindex="-1" autocomplete="off">
         <div class="form-grid">
           <div class="form-field">
             <label for="name">Full Name</label>
