@@ -462,23 +462,233 @@ p { color: var(--color-text-light); }
 }
 
 /* ---------- Portfolio ---------- */
+
+/* Stat strip */
+.portfolio-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--color-border);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.portfolio-stats .pstat {
+  background: var(--color-white);
+  padding: 28px 20px;
+  text-align: center;
+}
+.portfolio-stats .pstat strong {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  color: var(--color-ink);
+}
+.portfolio-stats .pstat span {
+  font-size: 0.8rem;
+  color: var(--color-text-light);
+  letter-spacing: 0.02em;
+}
+
+/* Filter tabs */
+.portfolio-filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 40px 0 44px;
+}
+.filter-btn {
+  padding: 10px 20px;
+  border-radius: 100px;
+  border: 1px solid var(--color-border);
+  background: var(--color-white);
+  color: var(--color-text-light);
+  font-size: 0.86rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.filter-btn:hover { border-color: var(--color-gold); color: var(--color-ink); }
+.filter-btn.active {
+  background: var(--color-ink);
+  border-color: var(--color-ink);
+  color: var(--color-white);
+}
+
+/* Spotlight case studies */
+.spotlight-case {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: 48px;
+  align-items: center;
+  padding: 40px 0;
+}
+.spotlight-case:not(:last-child) { border-bottom: 1px solid var(--color-border); }
+.spotlight-case.reverse .spotlight-cover { order: 2; }
+.spotlight-case.reverse .spotlight-copy { order: 1; }
+.spotlight-copy .result-row {
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+  margin: 22px 0;
+  padding: 18px 0;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+.spotlight-copy .result-row .r strong {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  color: var(--color-gold);
+}
+.spotlight-copy .result-row .r span {
+  font-size: 0.78rem;
+  color: var(--color-text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.spotlight-copy blockquote {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.05rem;
+  color: var(--color-ink);
+  border-left: 3px solid var(--color-gold);
+  padding-left: 18px;
+  margin-top: 18px;
+}
+.spotlight-copy blockquote cite {
+  display: block;
+  font-family: var(--font-sans);
+  font-style: normal;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-text-light);
+  margin-top: 8px;
+}
+
+/* Book cover artwork (CSS-drawn, genre-themed) */
+.spotlight-cover { display: flex; justify-content: center; }
+.book-cover {
+  width: 240px;
+  aspect-ratio: 5/7.6;
+  border-radius: 4px 8px 8px 4px;
+  position: relative;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 28px 22px;
+  color: var(--color-white);
+  overflow: hidden;
+  isolation: isolate;
+}
+.book-cover::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 0 0;
+  width: 10px;
+  background: rgba(0,0,0,0.25);
+  z-index: 2;
+}
+.book-cover::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 15%, rgba(255,255,255,0.16), transparent 55%);
+  z-index: 1;
+}
+.book-cover .bc-eyebrow {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.75;
+  position: relative; z-index: 2;
+}
+.book-cover .bc-title {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.15;
+  position: relative; z-index: 2;
+  text-wrap: balance;
+}
+.book-cover .bc-author {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.85;
+  position: relative; z-index: 2;
+}
+.book-cover .bc-mark {
+  position: absolute;
+  bottom: 22px; right: 20px;
+  width: 34px; height: 34px;
+  border: 1px solid rgba(255,255,255,0.5);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-serif);
+  font-size: 0.85rem;
+  z-index: 2;
+}
+
+/* Genre palettes for book covers */
+.bc-memoir { background: linear-gradient(160deg, #3a2a1f 0%, #6b4a2f 100%); }
+.bc-business { background: linear-gradient(160deg, #1a2e3a 0%, #2f5266 100%); }
+.bc-selfhelp { background: linear-gradient(160deg, #2e3a1f 0%, #55672f 100%); }
+.bc-thriller { background: linear-gradient(160deg, #1a1a2e 0%, #3a1f2e 100%); }
+.bc-fantasy { background: linear-gradient(160deg, #241a3a 0%, #4a2f66 100%); }
+.bc-lifestyle { background: linear-gradient(160deg, #3a2a1a 0%, #b8862b 100%); }
+
+/* Portfolio grid card (with real-style cover) */
 .portfolio-item {
   border-radius: var(--radius-lg);
   overflow: hidden;
-  background: var(--color-cream);
+  background: var(--color-white);
   border: 1px solid var(--color-border);
+  transition: transform var(--transition), box-shadow var(--transition);
 }
+.portfolio-item:hover { transform: translateY(-6px); box-shadow: var(--shadow-md); }
 .portfolio-cover {
   aspect-ratio: 3/4;
-  background: linear-gradient(135deg, var(--color-ink) 0%, var(--color-ink-soft) 100%);
   display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-gold-light);
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 22px 20px;
+  color: var(--color-white);
+  position: relative;
+  isolation: isolate;
+}
+.portfolio-cover::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 25% 10%, rgba(255,255,255,0.18), transparent 55%);
+  z-index: 1;
+}
+.portfolio-cover .pc-eyebrow {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.75;
+  position: relative; z-index: 2;
+}
+.portfolio-cover .pc-title {
   font-family: var(--font-serif);
-  font-size: 1.4rem;
-  text-align: center;
-  padding: 24px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1.18;
+  position: relative; z-index: 2;
+  text-wrap: balance;
+}
+.portfolio-cover .pc-author {
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.85;
+  position: relative; z-index: 2;
 }
 .portfolio-body { padding: 22px; }
 .portfolio-body .genre-tag {
@@ -491,7 +701,26 @@ p { color: var(--color-text-light); }
   margin-bottom: 8px;
 }
 .portfolio-body h3 { font-size: 1.1rem; margin-bottom: 6px; }
-.portfolio-body p { font-size: 0.88rem; }
+.portfolio-body p { font-size: 0.88rem; margin-bottom: 10px; }
+.portfolio-body .result-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-success);
+  background: #eaf6f0;
+  padding: 5px 12px;
+  border-radius: 100px;
+}
+.portfolio-item[data-genre] { display: block; }
+.portfolio-item.hide { display: none; }
+
+@media (max-width: 860px) {
+  .spotlight-case, .spotlight-case.reverse { grid-template-columns: 1fr; }
+  .spotlight-case.reverse .spotlight-cover, .spotlight-case.reverse .spotlight-copy { order: initial; }
+  .portfolio-stats { grid-template-columns: repeat(2, 1fr); }
+}
 
 /* ---------- FAQ ---------- */
 .faq-item {
