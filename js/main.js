@@ -1,122 +1,220 @@
-// Kingsley Book Publishers — Site Scripts
+/* Kingsley Book Publishers — interaction & scroll choreography */
 
-document.addEventListener('DOMContentLoaded', function () {
+(function () {
+  'use strict';
 
-  // Mobile nav toggle
-  var toggle = document.querySelector('.nav-toggle');
-  var links = document.querySelector('.nav-links');
-  if (toggle && links) {
-    toggle.addEventListener('click', function () {
-      links.classList.toggle('mobile-open');
-    });
-  }
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // FAQ accordion
-  document.querySelectorAll('.faq-question').forEach(function (q) {
-    q.addEventListener('click', function () {
-      var item = q.closest('.faq-item');
-      var wasOpen = item.classList.contains('open');
-      document.querySelectorAll('.faq-item.open').forEach(function (i) {
-        if (i !== item) i.classList.remove('open');
-      });
-      item.classList.toggle('open', !wasOpen);
-    });
-  });
+  document.addEventListener('DOMContentLoaded', function () {
 
-  // Scroll reveal
-  var revealEls = document.querySelectorAll('.reveal');
-  if ('IntersectionObserver' in window && revealEls.length) {
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('in-view');
-          io.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.12 });
-    revealEls.forEach(function (el) { io.observe(el); });
-  } else {
-    revealEls.forEach(function (el) { el.classList.add('in-view'); });
-  }
+    /* ---------- Header: shadow once scrolled ---------- */
+    var head = document.querySelector('.site-head');
+    var bar = document.querySelector('.progress');
 
-  // Contact / quote form — submits to Web3Forms (https://web3forms.com), free, no backend required.
-  // To activate: get a free access key at https://web3forms.com and paste it into the hidden
-  // "access_key" input in contact.html (search for YOUR_WEB3FORMS_ACCESS_KEY).
-  var form = document.getElementById('contact-form');
-  if (form) {
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      var success = document.getElementById('form-success');
-      var error = document.getElementById('form-error');
-      var submitBtn = form.querySelector('button[type="submit"]');
-      var accessKeyField = form.querySelector('input[name="access_key"]');
-      var keyIsSet = accessKeyField && accessKeyField.value && accessKeyField.value.indexOf('YOUR_') !== 0;
-
-      if (error) error.style.display = 'none';
-
-      if (!keyIsSet) {
-        // No Web3Forms key configured yet — fall back to a local demo confirmation
-        // so the page still feels functional while you add your key.
-        console.warn('Kingsley contact form: add your Web3Forms access_key in contact.html to send real emails.');
-        if (success) {
-          success.style.display = 'block';
-          success.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-        form.reset();
-        return;
+    function onScroll() {
+      var y = window.scrollY || document.documentElement.scrollTop;
+      if (head) head.classList.toggle('is-stuck', y > 8);
+      if (bar) {
+        var h = document.documentElement.scrollHeight - window.innerHeight;
+        bar.style.transform = 'scaleX(' + (h > 0 ? Math.min(y / h, 1) : 0) + ')';
       }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
 
-      var originalText = submitBtn ? submitBtn.textContent : '';
-      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Sending...'; }
+    /* ---------- Mobile drawer ---------- */
+    var burger = document.querySelector('.burger');
+    var drawer = document.querySelector('.drawer');
+    if (burger && drawer) {
+      burger.addEventListener('click', function () {
+        var open = drawer.classList.toggle('open');
+        burger.classList.toggle('open', open);
+        burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+        document.body.style.overflow = open ? 'hidden' : '';
+      });
+      drawer.addEventListener('click', function (e) {
+        if (e.target.tagName === 'A') {
+          drawer.classList.remove('open');
+          burger.classList.remove('open');
+          burger.setAttribute('aria-expanded', 'false');
+          document.body.style.overflow = '';
+        }
+      });
+    }
 
-      fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        headers: { 'Accept': 'application/json' },
-        body: new FormData(form)
-      })
-        .then(function (res) { return res.json(); })
-        .then(function (data) {
-          if (data.success) {
-            if (success) {
-              success.style.display = 'block';
-              success.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-            form.reset();
-          } else {
-            throw new Error(data.message || 'Submission failed');
-          }
-        })
-        .catch(function () {
-          if (error) error.style.display = 'block';
-        })
-        .finally(function () {
-          if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = originalText; }
-        });
+    /* ---------- Headline line reveal: wrap each line ---------- */
+    document.querySelectorAll('.lines').forEach(function (el) {
+      if (el.dataset.wrapped) return;
+      var parts = el.innerHTML.split(/<br\s*\/?>/i);
+      el.innerHTML = parts.map(function (p) {
+        return '<span><span>' + p.trim() + '</span></span>';
+      }).join('');
+      el.dataset.wrapped = '1';
     });
-  }
 
-  // Portfolio genre filter
-  var filterBtns = document.querySelectorAll('.filter-btn');
-  var portfolioItems = document.querySelectorAll('.portfolio-item[data-genre]');
-  if (filterBtns.length && portfolioItems.length) {
-    filterBtns.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        filterBtns.forEach(function (b) { b.classList.remove('active'); });
-        btn.classList.add('active');
-        var genre = btn.getAttribute('data-filter');
-        portfolioItems.forEach(function (item) {
-          var match = genre === 'all' || item.getAttribute('data-genre') === genre;
-          item.classList.toggle('hide', !match);
+    /* ---------- Reveal on scroll ---------- */
+    var targets = document.querySelectorAll('[data-anim], [data-stagger], .lines, .shelf');
+
+    if (reduced || !('IntersectionObserver' in window)) {
+      targets.forEach(function (el) { el.classList.add('seen'); });
+    } else {
+      // apply per-child stagger delays
+      document.querySelectorAll('[data-stagger]').forEach(function (group) {
+        var step = parseInt(group.dataset.stagger, 10) || 90;
+        Array.prototype.forEach.call(group.children, function (child, i) {
+          child.style.transitionDelay = (i * step) + 'ms';
         });
       });
-    });
-  }
+      // explicit per-element delay
+      document.querySelectorAll('[data-delay]').forEach(function (el) {
+        el.style.transitionDelay = el.dataset.delay + 'ms';
+      });
 
-  // Header shrink-on-scroll shadow
-  var header = document.querySelector('.site-header');
-  if (header) {
-    window.addEventListener('scroll', function () {
-      header.style.boxShadow = window.scrollY > 10 ? '0 4px 20px rgba(26,26,46,0.08)' : 'none';
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('seen');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+
+      targets.forEach(function (el) { io.observe(el); });
+    }
+
+    /* ---------- Count-up stats ---------- */
+    var counters = document.querySelectorAll('[data-count]');
+    if (counters.length) {
+      if (reduced || !('IntersectionObserver' in window)) {
+        counters.forEach(function (el) {
+          el.textContent = el.dataset.prefix || '';
+          el.textContent += el.dataset.count + (el.dataset.suffix || '');
+        });
+      } else {
+        var cio = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            var el = entry.target;
+            cio.unobserve(el);
+            var end = parseFloat(el.dataset.count);
+            var dec = (el.dataset.count.split('.')[1] || '').length;
+            var pre = el.dataset.prefix || '';
+            var suf = el.dataset.suffix || '';
+            var dur = 1500, t0 = null;
+            function tick(ts) {
+              if (!t0) t0 = ts;
+              var p = Math.min((ts - t0) / dur, 1);
+              var eased = 1 - Math.pow(1 - p, 3);
+              el.textContent = pre + (end * eased).toFixed(dec) + suf;
+              if (p < 1) requestAnimationFrame(tick);
+            }
+            requestAnimationFrame(tick);
+          });
+        }, { threshold: 0.5 });
+        counters.forEach(function (el) { cio.observe(el); });
+      }
+    }
+
+    /* ---------- Sticky process: light the active step ---------- */
+    var steps = document.querySelectorAll('.step');
+    if (steps.length && !reduced && 'IntersectionObserver' in window) {
+      var sio = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          entry.target.classList.toggle('lit', entry.isIntersecting);
+        });
+      }, { threshold: 0.55 });
+      steps.forEach(function (s) { sio.observe(s); });
+    } else {
+      steps.forEach(function (s) { s.classList.add('lit'); });
+    }
+
+    /* ---------- Accordion ---------- */
+    document.querySelectorAll('.faq-q').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var item = btn.closest('.faq-item');
+        var panel = item.querySelector('.faq-a');
+        var isOpen = item.classList.contains('open');
+
+        // close siblings in the same list
+        var list = item.parentElement;
+        list.querySelectorAll('.faq-item.open').forEach(function (other) {
+          if (other !== item) {
+            other.classList.remove('open');
+            other.querySelector('.faq-a').style.height = '0px';
+            other.querySelector('.faq-q').setAttribute('aria-expanded', 'false');
+          }
+        });
+
+        if (isOpen) {
+          panel.style.height = '0px';
+          item.classList.remove('open');
+          btn.setAttribute('aria-expanded', 'false');
+        } else {
+          item.classList.add('open');
+          panel.style.height = panel.firstElementChild.offsetHeight + 'px';
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      });
     });
-  }
-});
+    // open any marked default
+    document.querySelectorAll('.faq-item.open').forEach(function (item) {
+      var p = item.querySelector('.faq-a');
+      if (p) p.style.height = p.firstElementChild.offsetHeight + 'px';
+    });
+
+    /* ---------- Contact form (Web3Forms) ---------- */
+    var form = document.getElementById('contact-form');
+    if (form) {
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var ok = document.getElementById('form-ok');
+        var bad = document.getElementById('form-bad');
+        var btn = form.querySelector('button[type="submit"]');
+        var keyField = form.querySelector('input[name="access_key"]');
+        var hasKey = keyField && keyField.value && keyField.value.indexOf('YOUR_') !== 0;
+
+        if (bad) bad.style.display = 'none';
+
+        if (!hasKey) {
+          if (ok) { ok.style.display = 'block'; ok.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+          form.reset();
+          return;
+        }
+
+        var label = btn ? btn.textContent : '';
+        if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+
+        fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { Accept: 'application/json' },
+          body: new FormData(form)
+        })
+          .then(function (r) { return r.json(); })
+          .then(function (d) {
+            if (!d.success) throw new Error(d.message || 'failed');
+            if (ok) { ok.style.display = 'block'; ok.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+            form.reset();
+          })
+          .catch(function () { if (bad) bad.style.display = 'block'; })
+          .finally(function () { if (btn) { btn.disabled = false; btn.textContent = label; } });
+      });
+    }
+
+    /* ---------- Portfolio genre filter ---------- */
+    var chips = document.querySelectorAll('.filter-btn');
+    var items = document.querySelectorAll('.work[data-genre]');
+    if (chips.length && items.length) {
+      chips.forEach(function (chip) {
+        chip.addEventListener('click', function () {
+          chips.forEach(function (c) { c.classList.remove('active'); });
+          chip.classList.add('active');
+          var want = chip.dataset.filter;
+          items.forEach(function (it) {
+            var show = want === 'all' || it.dataset.genre === want;
+            it.style.display = show ? '' : 'none';
+          });
+        });
+      });
+    }
+  });
+})();
