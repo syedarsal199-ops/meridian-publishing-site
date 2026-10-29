@@ -148,19 +148,23 @@ p { color: var(--color-text-light); }
 }
 .logo {
   font-family: var(--font-serif);
-  font-size: 1.5rem;
+  font-size: 1.35rem;
   font-weight: 700;
   color: var(--color-ink);
   display: flex;
-  align-items: center;
-  gap: 8px;
+  align-items: baseline;
+  gap: 7px;
   letter-spacing: 0.01em;
+  white-space: nowrap;
+  flex-shrink: 0;
+  line-height: 1.1;
 }
-.logo span { color: var(--color-gold); }
+.logo span { color: var(--color-gold); white-space: nowrap; }
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 36px;
+  gap: 26px;
+  flex-shrink: 0;
 }
 .nav-links a {
   font-size: 0.94rem;
@@ -180,12 +184,14 @@ p { color: var(--color-text-light); }
 }
 .nav-cta { display: flex; align-items: center; gap: 18px; }
 .nav-phone {
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: 600;
   color: var(--color-ink);
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 .nav-toggle {
   display: none;
