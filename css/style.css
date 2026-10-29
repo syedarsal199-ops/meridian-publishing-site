@@ -160,6 +160,31 @@ p { color: var(--color-text-light); }
   line-height: 1.1;
 }
 .logo span { color: var(--color-gold); white-space: nowrap; }
+
+/* Logo lockup: crown-and-book emblem beside a two-line wordmark */
+.logo-mark {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  display: block;
+}
+.logo .logo-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  color: var(--color-ink);
+  line-height: 1;
+}
+.logo .logo-text small {
+  font-family: var(--font-sans);
+  font-size: 0.5rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+.footer-grid .logo .logo-text { color: var(--color-white); }
+.footer-grid .logo .logo-text small { color: var(--color-gold-light); }
 .nav-links {
   display: flex;
   align-items: center;
@@ -842,6 +867,12 @@ p { color: var(--color-text-light); }
 .reveal.in-view { opacity: 1; transform: translateY(0); }
 
 /* ---------- Responsive ---------- */
+/* Collapse the nav to a hamburger before the logo and links can crowd */
+@media (max-width: 1120px) {
+  .nav-links { display: none; }
+  .nav-toggle { display: flex; }
+  .nav-phone span.label { display: none; }
+}
 @media (max-width: 980px) {
   .hero-grid { grid-template-columns: 1fr; }
   .hero-visual { order: -1; }
@@ -849,9 +880,10 @@ p { color: var(--color-text-light); }
   .grid--3 { grid-template-columns: repeat(2, 1fr); }
   .process { grid-template-columns: repeat(2, 1fr); }
   .footer-grid { grid-template-columns: repeat(2, 1fr); }
-  .nav-links { display: none; }
-  .nav-toggle { display: flex; }
-  .nav-phone span.label { display: none; }
+}
+@media (max-width: 420px) {
+  .nav-phone { display: none; }
+  .logo { font-size: 1.15rem; }
 }
 @media (max-width: 640px) {
   .section { padding: 64px 0; }
