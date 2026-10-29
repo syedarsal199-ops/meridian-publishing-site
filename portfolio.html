@@ -98,90 +98,31 @@
   </div>
 </section>
 
-<section class="band band--paper2">
-  <div class="wrap">
-    <div class="head" data-anim="up">
-      <div>
-        <p class="eyebrow">Full portfolio</p>
-        <h2 class="d2">Browse by genre.</h2>
-      </div>
-      <p class="body-copy">Titles and author names on this page are representative of our work across each category.</p>
-    </div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:46px" data-anim="up"><button class="filter-btn active" data-filter="all">All books</button><button class="filter-btn" data-filter="memoir">Memoir</button><button class="filter-btn" data-filter="business">Business</button><button class="filter-btn" data-filter="selfhelp">Self-Help</button><button class="filter-btn" data-filter="thriller">Thriller</button><button class="filter-btn" data-filter="fantasy">Fantasy</button><button class="filter-btn" data-filter="lifestyle">Lifestyle</button></div>
-    <div class="work-grid" data-stagger="90">
-      <article class="work" data-genre="memoir">
-        <div class="work-cover c-memoir"><i>Memoir</i><b>The Long Road Home</b><u>Renee Alston</u></div>
-        <div class="work-meta">
-          <strong>The Long Road Home</strong>
-          <span>Twenty years of journals, shaped into a three-act memoir about leaving and returning.</span>
-          <span class="work-result">#4 in Memoirs</span>
-        </div>
-      </article>
-      <article class="work" data-genre="business">
-        <div class="work-cover c-business"><i>Business</i><b>Built to Scale</b><u>David Chen</u></div>
-        <div class="work-meta">
-          <strong>Built to Scale</strong>
-          <span>A founder's playbook taken from garage to $50M ARR, written in a ten-week sprint.</span>
-          <span class="work-result">50,000+ copies sold</span>
-        </div>
-      </article>
-      <article class="work" data-genre="selfhelp">
-        <div class="work-cover c-selfhelp"><i>Self-Help</i><b>Quiet Confidence</b><u>Sofia Marquez</u></div>
-        <div class="work-meta">
-          <strong>Quiet Confidence</strong>
-          <span>A therapist's clinical framework restructured into seven accessible steps.</span>
-          <span class="work-result">#3 in Self-Help</span>
-        </div>
-      </article>
-      <article class="work" data-genre="thriller">
-        <div class="work-cover c-thriller"><i>Thriller</i><b>The Last Signal</b><u>Marcus Webb</u></div>
-        <div class="work-meta">
-          <strong>The Last Signal</strong>
-          <span>A debut techno-thriller about a deep-space transmission that should not exist.</span>
-          <span class="work-result">40,000+ copies sold</span>
-        </div>
-      </article>
-      <article class="work" data-genre="memoir">
-        <div class="work-cover c-memoir"><i>Family Memoir</i><b>Rooted</b><u>The Alvarez Family</u></div>
-        <div class="work-meta">
-          <strong>Rooted</strong>
-          <span>Three generations traced from Oaxaca to Ohio, built from eleven family interviews.</span>
-          <span class="work-result">Featured on NPR</span>
-        </div>
-      </article>
-      <article class="work" data-genre="business">
-        <div class="work-cover c-business"><i>Business</i><b>The Founder's Playbook</b><u>Priya Nathan</u></div>
-        <div class="work-meta">
-          <strong>The Founder's Playbook</strong>
-          <span>Fundraising, hiring and culture lessons drawn from three exits in ten years.</span>
-          <span class="work-result">Inc. recommended read</span>
-        </div>
-      </article>
-      <article class="work" data-genre="selfhelp">
-        <div class="work-cover c-selfhelp"><i>Self-Help</i><b>Letting Go, Moving On</b><u>Grace Whitfield</u></div>
-        <div class="work-meta">
-          <strong>Letting Go, Moving On</strong>
-          <span>A gentle, structured framework for processing grief and major life change.</span>
-          <span class="work-result">12,000+ copies sold</span>
-        </div>
-      </article>
-      <article class="work" data-genre="fantasy">
-        <div class="work-cover c-fantasy"><i>Fantasy</i><b>Ashes of Eldermoor</b><u>J.R. Colton</u></div>
-        <div class="work-meta">
-          <strong>Ashes of Eldermoor</strong>
-          <span>Book one of an epic trilogy set in a kingdom running out of magic.</span>
-          <span class="work-result">#7 in Epic Fantasy</span>
-        </div>
-      </article>
-      <article class="work" data-genre="lifestyle">
-        <div class="work-cover c-lifestyle"><i>Lifestyle</i><b>Recipes From Home</b><u>The Hoang Family</u></div>
-        <div class="work-meta">
-          <strong>Recipes From Home</strong>
-          <span>A four-generation family cookbook, typeset in full colour and self-published.</span>
-          <span class="work-result">8,000+ copies sold</span>
-        </div>
-      </article></div>
+<section class="showcase" aria-labelledby="sc-title">
+  <div class="collage" id="collage" aria-hidden="true"></div>
+
+  <div class="sc-head">
+    <span class="eb">Selected work</span>
+    <h2 id="sc-title">Four hundred books. Pick a shelf.</h2>
   </div>
+
+  <div class="genres" role="tablist" aria-label="Filter portfolio by genre" id="genres"></div>
+
+  <div class="rail-wrap">
+    <div class="rail" id="rail" tabindex="0" role="region" aria-label="Book covers, scrollable"></div>
+  </div>
+
+  <div class="rail-ctrl">
+    <button class="rbtn" id="prev" aria-label="Previous book">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+    </button>
+    <div class="counter"><b id="cur">01</b> / <span id="tot">08</span></div>
+    <button class="rbtn" id="next" aria-label="Next book">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+    </button>
+  </div>
+
+  <div class="rprog"><i id="prog"></i></div>
 </section>
 
 <section class="band band--tight">
