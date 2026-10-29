@@ -1,4 +1,4 @@
-// Meridian Publishing House — Site Scripts
+// Kingsley Book Publishers — Site Scripts
 
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if (!keyIsSet) {
         // No Web3Forms key configured yet — fall back to a local demo confirmation
         // so the page still feels functional while you add your key.
-        console.warn('Meridian contact form: add your Web3Forms access_key in contact.html to send real emails.');
+        console.warn('Kingsley contact form: add your Web3Forms access_key in contact.html to send real emails.');
         if (success) {
           success.style.display = 'block';
           success.scrollIntoView({ behavior: 'smooth', block: 'center' });
