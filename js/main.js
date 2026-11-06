@@ -171,6 +171,165 @@
       }
     }
 
+    /* ---------- Book cost calculator ---------- */
+    (function () {
+      var wc = document.getElementById('wc');
+      if (!wc) return;
+      var genre = document.getElementById('genre'),
+          start = document.getElementById('start'),
+          opts  = Array.prototype.slice.call(document.querySelectorAll('.copt input')),
+          lowEl = document.getElementById('low'),
+          highEl= document.getElementById('high'),
+          wcOut = document.getElementById('wcOut'),
+          hint  = document.getElementById('wcHint'),
+          sub   = document.getElementById('calcSub'),
+          weeks = document.getElementById('weeks'),
+          lines = document.getElementById('lines');
+
+      var RATE = 0.125;          /* base per-word ghostwriting rate */
+      var SPREAD = 0.28;         /* upper end of the range */
+
+      function money(n) {
+        n = Math.round(n / 100) * 100;
+        return '$' + n.toLocaleString('en-US');
+      }
+      function pages(w) { return Math.round(w / 250); }
+
+      function hintFor(w) {
+        if (w <= 20000) return 'A short guide or lead magnet \u2014 around ' + pages(w) + ' printed pages.';
+        if (w <= 45000) return 'A short book or novella \u2014 around ' + pages(w) + ' printed pages.';
+        if (w <= 75000) return 'A typical memoir or business book \u2014 around ' + pages(w) + ' printed pages.';
+        return 'A substantial book \u2014 around ' + pages(w) + ' printed pages.';
+      }
+
+      function calc() {
+        var w  = +wc.value,
+            g  = +genre.value,
+            st = +start.value;
+
+        var writing = w * RATE * g * st;
+        if (writing < 1200) writing = 1200;      /* editing-only floor */
+
+        var extras = 0, extraNames = [];
+        opts.forEach(function (o) {
+          if (o.checked) {
+            extras += +o.dataset.add;
+            extraNames.push(o.parentNode.querySelector('span').textContent);
+          }
+        });
+
+        var low  = writing + extras;
+        var high = low * (1 + SPREAD);
+
+        lowEl.textContent  = money(low);
+        highEl.textContent = money(high);
+        wcOut.textContent  = w.toLocaleString('en-US') + ' words';
+        hint.textContent   = hintFor(w);
+
+        sub.textContent = st <= 0.4
+          ? 'Editing, design and publishing \u2014 no ghostwriting'
+          : 'Ghostwriting, editing and production';
+
+        /* timeline scales with words and how much exists already */
+        var base = Math.round((w / 5000) * (st <= 0.4 ? 0.45 : 1) * g);
+        if (base < 4) base = 4;
+        weeks.textContent = base + '\u2013' + (base + 4) + ' weeks';
+
+        var rows = '<li><span>' + (st <= 0.4 ? 'Editing &amp; revision' : 'Writing &amp; editing')
+                 + '</span><b>' + money(writing) + '</b></li>';
+        if (extraNames.length) {
+          rows += '<li><span>' + extraNames.join(', ') + '</span><b>' + money(extras) + '</b></li>';
+        }
+        lines.innerHTML = rows;
+      }
+
+      [wc, genre, start].forEach(function (el) {
+        el.addEventListener('input', calc);
+        el.addEventListener('change', calc);
+      });
+      opts.forEach(function (o) { o.addEventListener('change', calc); });
+      calc();
+    })();
+
+    /* ---------- Book title generator ---------- */
+    (function () {
+      var go = document.getElementById('tgGo');
+      if (!go) return;
+      var subjEl = document.getElementById('tgSubject'),
+          genEl  = document.getElementById('tgGenre'),
+          list   = document.getElementById('tgList'),
+          empty  = document.getElementById('tgEmpty');
+
+      /* {s} = subject as given, {S} = Title Case, {p} = plural-ish */
+      var P = {
+        memoir: ['The Year of {s}', 'Everything but {S}', 'Leaving {S}', 'The Last Summer of {s}',
+                 'What {S} Taught Me', 'Notes on {s}', 'A Map of {s}', 'The Long Way Through {s}',
+                 'After {S}', 'Letters About {s}', 'The Shape of {s}', 'Somewhere Past {S}'],
+        business: ['The {S} Advantage', 'Built on {s}', 'The {S} Playbook', 'Beyond {s}',
+                   'The {S} Engine', 'Scaling {s}', 'The Quiet Power of {s}', 'Rethinking {s}',
+                   'The {S} Method', 'From {S} to Scale', 'Unreasonable {s}', 'The {S} Standard'],
+        selfhelp: ['The Art of {s}', 'Permission to {s}', 'Begin with {s}', 'Unlearning {s}',
+                   'The {S} Habit', 'Softer Than {s}', 'Making Peace with {s}', 'Small Acts of {s}',
+                   'You Are Allowed {s}', 'The Other Side of {s}', 'Choosing {s}', 'Quietly {S}'],
+        howto: ['The Complete Guide to {s}', '{S}, Simplified', 'How to {s} Without Losing Your Mind',
+                'The {S} Handbook', 'Start Here: {S}', '{S} in Ninety Days', 'The Practical {S} Guide',
+                'Everything You Need for {s}', 'Master {S} Faster', 'The {S} Blueprint'],
+        fiction: ['The {S} House', 'A Season of {s}', 'The Weight of {s}', 'Where the {S} Goes',
+                  'All That {S}', 'The Memory of {s}', 'Salt and {S}', 'The Quiet {S}',
+                  'Before the {S}', 'Our Share of {s}', 'The {S} Hours', 'Small {S}'],
+        thriller: ['The {S} Protocol', 'Nine Days of {s}', 'Cold {S}', 'The Last {S}',
+                   'Nothing but {S}', 'The {S} Room', 'Burn {S}', 'The {S} Witness',
+                   'Dead {S}', 'The {S} Exit', 'No Trace of {s}', 'The {S} Hour'],
+        fantasy: ['The {S} Crown', 'Ashes of {s}', '{S}bound', 'The Last {S} of the North',
+                  'A Court of {s}', 'The {S} Throne', 'Blood and {S}', 'The {S} Gate',
+                  'Daughter of {s}', 'The {S} Rising', 'Empire of {s}', 'The {S} Oath'],
+        children: ['The Boy Who Loved {s}', 'Where {S} Goes', '{S} and the Very Big Day',
+                   'The Littlest {S}', 'Goodnight, {S}', 'One More {S}', 'The Bravest {S}',
+                   '{S} Finds a Friend', 'Ten Little {S}', 'The Day {S} Came to Stay']
+      };
+
+      function titleCase(t) {
+        var small = ['a','an','the','of','and','or','but','for','to','in','on','at','by','with'];
+        return t.split(' ').map(function (w, i) {
+          if (!w) return w;
+          if (i > 0 && small.indexOf(w.toLowerCase()) > -1) return w.toLowerCase();
+          return w.charAt(0).toUpperCase() + w.slice(1);
+        }).join(' ');
+      }
+
+      function shuffle(a) {
+        a = a.slice();
+        for (var i = a.length - 1; i > 0; i--) {
+          var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t;
+        }
+        return a;
+      }
+
+      function run() {
+        var subj = (subjEl.value || '').trim().replace(/\s+/g, ' ');
+        if (!subj) {
+          empty.textContent = 'Tell us what the book is about first.';
+          empty.style.display = 'block';
+          list.innerHTML = '';
+          subjEl.focus();
+          return;
+        }
+        var pats = shuffle(P[genEl.value] || P.memoir).slice(0, 9);
+        var S = titleCase(subj);
+        list.innerHTML = pats.map(function (t) {
+          var out = t.replace(/\{s\}/g, S).replace(/\{S\}/g, S);
+          return '<li><span>' + out + '</span></li>';
+        }).join('');
+        empty.style.display = 'none';
+      }
+
+      go.addEventListener('click', run);
+      subjEl.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') { e.preventDefault(); run(); }
+      });
+      genEl.addEventListener('change', function () { if (subjEl.value.trim()) run(); });
+    })();
+
     /* ---------- Accordion ---------- */
     document.querySelectorAll('.faq-q').forEach(function (btn) {
       btn.addEventListener('click', function () {

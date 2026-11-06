@@ -1821,3 +1821,103 @@ section { position: relative; }
   .mq { overflow-x: auto; -webkit-mask-image: none; mask-image: none; }
   .mq-track { animation: none; }
 }
+
+/* ==========================================================================
+   Free tools — cost calculator
+   ========================================================================== */
+.calc { display: grid; grid-template-columns: minmax(0,1.25fr) minmax(0,1fr); gap: clamp(28px,4vw,56px); align-items: start; }
+.calc-controls { display: flex; flex-direction: column; gap: 32px; }
+.cfield { border: 0; padding: 0; margin: 0; }
+.cfield > label, .cfield > legend {
+  display: block; font-family: var(--display); font-size: 1.12rem; font-weight: 600;
+  color: var(--ink); margin-bottom: 12px; padding: 0;
+}
+.cfield small { display: block; margin-top: 9px; font-size: 0.85rem; color: var(--text-faint); }
+.cfield select {
+  width: 100%; padding: 13px 15px; border: 1px solid var(--rule-strong); border-radius: var(--r);
+  background: var(--paper); font: inherit; font-size: 0.95rem; color: var(--text);
+}
+.cfield select:focus-visible { outline: 2px solid var(--gold); outline-offset: 1px; }
+
+input[type="range"]#wc { width: 100%; accent-color: var(--gold); height: 26px; cursor: pointer; }
+#wcOut {
+  display: block; margin-top: 4px; font-family: var(--display);
+  font-size: 1.6rem; font-weight: 600; color: var(--gold);
+}
+
+.copts { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 10px; }
+.copt {
+  display: grid; grid-template-columns: auto minmax(0,1fr) auto; align-items: center; gap: 11px;
+  padding: 13px 15px; border: 1px solid var(--rule); border-radius: var(--r);
+  background: var(--paper); cursor: pointer; font-size: 0.93rem;
+  transition: border-color 0.25s var(--ease), background 0.25s var(--ease);
+}
+.copt:hover { border-color: var(--rule-strong); }
+.copt:has(input:checked) { border-color: var(--gold); background: var(--gold-wash); }
+.copt input { accent-color: var(--gold); width: 16px; height: 16px; }
+.copt em { font-style: normal; font-size: 0.78rem; color: var(--text-faint); white-space: nowrap; }
+
+.calc-out {
+  position: sticky; top: 112px;
+  background: var(--ink); color: var(--on-ink);
+  border-radius: var(--r-lg); padding: 30px 28px 26px;
+  box-shadow: 0 34px 70px -34px rgba(23,18,15,0.6);
+}
+.calc-out .eyebrow { color: var(--gold-bright); }
+.calc-fig { display: flex; align-items: baseline; flex-wrap: wrap; gap: 9px; margin-top: 14px; }
+.calc-fig b {
+  font-family: var(--display); font-size: clamp(1.9rem, 3.4vw, 2.5rem); font-weight: 600;
+  color: var(--on-ink); line-height: 1;
+}
+.calc-fig span { font-size: 0.9rem; color: var(--on-ink-soft); }
+.calc-sub { margin-top: 10px; font-size: 0.9rem; color: var(--on-ink-soft); }
+.calc-lines {
+  list-style: none; padding: 0; margin: 20px 0 0;
+  border-top: 1px solid var(--rule-on-ink);
+}
+.calc-lines li {
+  display: flex; justify-content: space-between; gap: 14px;
+  padding: 9px 0; font-size: 0.87rem; color: var(--on-ink-soft);
+  border-bottom: 1px solid var(--rule-on-ink);
+}
+.calc-lines li b { color: var(--on-ink); font-weight: 500; }
+.calc-time {
+  display: flex; align-items: baseline; gap: 10px; margin: 20px 0 18px;
+}
+.calc-time b { font-family: var(--display); font-size: 1.3rem; color: var(--gold-bright); }
+.calc-time span { font-size: 0.85rem; color: var(--on-ink-soft); }
+.calc-note { margin-top: 14px; font-size: 0.78rem; line-height: 1.6; color: var(--on-ink-soft); }
+
+@media (max-width: 900px) {
+  .calc { grid-template-columns: minmax(0,1fr); }
+  .calc-out { position: static; }
+}
+
+/* ---------- Title generator ---------- */
+.tgen { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.1fr); gap: clamp(28px,4vw,56px); align-items: start; }
+.tgen-form { display: flex; flex-direction: column; gap: 26px; }
+.tgen-form input[type="text"] {
+  width: 100%; padding: 14px 16px; border: 1px solid var(--rule-strong);
+  border-radius: var(--r); background: var(--paper); font: inherit; font-size: 1rem; color: var(--text);
+}
+.tgen-form input[type="text"]:focus-visible { outline: 2px solid var(--gold); outline-offset: 1px; }
+.tgen-out {
+  background: var(--paper-2); border: 1px solid var(--rule);
+  border-radius: var(--r-lg); padding: 28px 26px; min-height: 280px;
+}
+.tgen-list { list-style: none; padding: 0; margin: 16px 0 0; }
+.tgen-list li {
+  padding: 13px 2px; border-bottom: 1px solid var(--rule);
+  font-family: var(--display); font-size: 1.14rem; color: var(--ink);
+  animation: tgIn 0.45s var(--ease-out) both;
+}
+.tgen-list li:nth-child(1){animation-delay:.02s} .tgen-list li:nth-child(2){animation-delay:.06s}
+.tgen-list li:nth-child(3){animation-delay:.10s} .tgen-list li:nth-child(4){animation-delay:.14s}
+.tgen-list li:nth-child(5){animation-delay:.18s} .tgen-list li:nth-child(6){animation-delay:.22s}
+.tgen-list li:nth-child(7){animation-delay:.26s} .tgen-list li:nth-child(8){animation-delay:.30s}
+.tgen-list li:nth-child(9){animation-delay:.34s}
+.tgen-list li:last-child { border-bottom: none; }
+@keyframes tgIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.tgen-empty { margin-top: 16px; color: var(--text-faint); font-size: 0.93rem; }
+@media (max-width: 900px) { .tgen { grid-template-columns: minmax(0,1fr); } }
+@media (prefers-reduced-motion: reduce) { .tgen-list li { animation: none; } }
