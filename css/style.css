@@ -5,38 +5,38 @@
 
 :root {
   /* Ink family — deep navy-black, the dominant voice */
-  --ink:            #0f1724;
-  --ink-2:          #1c2534;
-  --ink-3:          #2f3b4d;
+  --ink:            #17120f;
+  --ink-2:          #251d18;
+  --ink-3:          #3b2f28;
 
   /* Paper — warm white, barely tinted, not cream */
-  --paper:          #fbfaf8;
-  --paper-2:        #f4f2ed;
-  --paper-3:        #e8e4db;
+  --paper:          #fcfaf7;
+  --paper-2:        #f5efe7;
+  --paper-3:        #e8dfd3;
 
   /* Gold — the brand accent, used sparingly and with intent */
-  --gold:           #b8862b;
-  --gold-bright:    #d9a94f;
-  --gold-wash:      #f6efe0;
+  --gold:           #8e1f2f;
+  --gold-bright:    #d9596a;
+  --gold-wash:      #faecec;
 
   /* Oxblood — secondary accent, for editorial warmth and emphasis */
-  --oxblood:        #6b2436;
+  --oxblood:        #9a6b1e;
 
   /* Type colors */
-  --text:           #26303f;
-  --text-soft:      #5b6675;
-  --text-faint:     #8b94a1;
-  --on-ink:         #eef1f5;
-  --on-ink-soft:    #9aa5b4;
+  --text:           #2a2220;
+  --text-soft:      #5e534e;
+  --text-faint:     #8c807a;
+  --on-ink:         #f5efe9;
+  --on-ink-soft:    #ab9e94;
 
   /* Semantic */
   --ok:             #2d6a4f;
   --warn:           #9a3412;
 
   /* Lines */
-  --rule:           #e2ded4;
-  --rule-strong:    #cdc7b9;
-  --rule-on-ink:    rgba(238,241,245,0.14);
+  --rule:           #e6ded3;
+  --rule-strong:    #cfc3b4;
+  --rule-on-ink:    rgba(245,239,233,0.15);
 
   /* Type */
   --display: 'Fraunces', 'Iowan Old Style', Georgia, serif;
@@ -207,7 +207,7 @@ section { position: relative; }
 .btn:hover svg { transform: translateX(3px); }
 
 .btn--gold { background: var(--gold); color: #fff; }
-.btn--gold:hover { background: #a2741f; }
+.btn--gold:hover { background: #711724; }
 
 .btn--ink { background: var(--ink); color: #fff; }
 .btn--ink:hover { background: var(--ink-2); }
@@ -555,7 +555,7 @@ section { position: relative; }
 .vol-1 {
   width: 180px; height: 268px;
   left: 0; top: 54px;
-  background: linear-gradient(158deg, #2f3b4d, #141c29);
+  background: linear-gradient(158deg, #3b2f28, #1a1310);
   color: #e8ddc4;
   transform: rotate(-7deg);
   z-index: 1;
@@ -571,7 +571,7 @@ section { position: relative; }
 .vol-3 {
   width: 176px; height: 260px;
   left: 282px; top: 76px;
-  background: linear-gradient(158deg, #6b2436, #45121f);
+  background: linear-gradient(158deg, #8e1f2f, #4e0f1b);
   color: #f4dde2;
   transform: rotate(9deg);
   z-index: 3;
@@ -779,7 +779,7 @@ section { position: relative; }
 .c-fantasy   { background: linear-gradient(158deg, #2b2450, #171334); color: #ddd7f2; }
 .c-lifestyle { background: linear-gradient(158deg, #7d5a1c, #4d3710); color: #fbf0d8; }
 .c-gold      { background: linear-gradient(158deg, #8a6420, #5e4312); color: #fdf6e6; }
-.c-oxblood   { background: linear-gradient(158deg, #6b2436, #45121f); color: #f4dde2; }
+.c-oxblood   { background: linear-gradient(158deg, #8e1f2f, #4e0f1b); color: #f4dde2; }
 
 /* ---------- Testimonials ---------- */
 
@@ -1020,7 +1020,7 @@ section { position: relative; }
   align-items: center;
   gap: 9px;
 }
-.crumb a { color: rgba(238,241,245,0.76); transition: color 0.25s var(--ease); }
+.crumb a { color: rgba(245,239,233,0.76); transition: color 0.25s var(--ease); }
 .crumb a:hover { color: var(--gold-bright); }
 .crumb svg { width: 11px; height: 11px; opacity: 0.5; }
 
@@ -1404,7 +1404,7 @@ section { position: relative; }
   position:relative;
   font-family:var(--sans);font-size:.85rem;font-weight:600;
   padding:11px 22px;border-radius:100px;cursor:pointer;
-  background:transparent;color:#cfd3d9;
+  background:transparent;color:var(--on-ink-soft);
   border:1px solid var(--rule-ink);
   transition:color .3s var(--ease-out), border-color .3s var(--ease-out);
   overflow:hidden;white-space:nowrap;
@@ -1593,3 +1593,8 @@ section { position: relative; }
   .slide-meta{opacity:1!important;transform:none!important}
   .gchip::before{transition:none}
 }
+
+/* Dark page-hero bands: accent must lift off near-black */
+.phero .eyebrow,
+.section--ink .eyebrow,
+.cta-band .eyebrow { color: var(--gold-bright); }
