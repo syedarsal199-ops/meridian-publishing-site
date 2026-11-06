@@ -330,6 +330,66 @@
       genEl.addEventListener('change', function () { if (subjEl.value.trim()) run(); });
     })();
 
+    /* ---------- Client reviews ----------
+       REPLACE the sample entries below with real reviews, then this section can go live.
+       Each entry: [ name, review text, meta line, stars ]
+       -------------------------------------------------------------------- */
+    var REVIEWS = [
+      ['Reviewer name',   'The review text goes here, word for word as the client wrote it. Keep it exactly as written \u2014 edited reviews read as invented ones.', 'Memoir \u00b7 March 2026', 5],
+      ['Reviewer name',   'A second review. Shorter ones carry just as well in this layout as long ones.', 'Business book \u00b7 April 2026', 5],
+      ['Reviewer name',   'A third review. Three to ten works well here; past ten, the section gets long.', 'Repeat client \u00b7 May 2026', 5]
+    ];
+
+    (function () {
+      var list = document.getElementById('revList');
+      if (!list) return;
+
+      var avgEl = document.getElementById('revAvg'),
+          wordEl = document.getElementById('revCountWord');
+
+      var WORDS = ['No','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten',
+                   'Eleven','Twelve'];
+
+      function esc(t) {
+        return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      }
+
+      list.innerHTML = REVIEWS.map(function (r) {
+        return '<li class="rev-item">'
+             +   '<div class="rev-body">'
+             +     '<div class="rev-name">' + esc(r[0]) + '</div>'
+             +     '<p class="rev-quote">' + esc(r[1]) + '</p>'
+             +     '<p class="rev-meta">' + esc(r[2]) + '</p>'
+             +   '</div>'
+             +   '<span class="rev-stars" role="img" aria-label="' + (r[3] || 5) + ' out of 5 stars"></span>'
+             + '</li>';
+      }).join('');
+
+      if (avgEl) {
+        var sum = REVIEWS.reduce(function (t, r) { return t + (r[3] || 5); }, 0);
+        avgEl.textContent = (sum / REVIEWS.length).toFixed(1);
+      }
+      if (wordEl) {
+        wordEl.textContent = WORDS[REVIEWS.length] || REVIEWS.length;
+      }
+
+      var items = list.querySelectorAll('.rev-item');
+      if (reduced || !('IntersectionObserver' in window)) {
+        items.forEach(function (el) { el.classList.add('in'); });
+      } else {
+        var rio = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e, i) {
+            if (e.isIntersecting) {
+              var el = e.target;
+              setTimeout(function () { el.classList.add('in'); }, i * 90);
+              rio.unobserve(el);
+            }
+          });
+        }, { threshold: 0.25, rootMargin: '0px 0px -8% 0px' });
+        items.forEach(function (el) { rio.observe(el); });
+      }
+    })();
+
     /* ---------- Accordion ---------- */
     document.querySelectorAll('.faq-q').forEach(function (btn) {
       btn.addEventListener('click', function () {
