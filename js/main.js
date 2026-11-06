@@ -115,17 +115,60 @@
       }
     }
 
-    /* ---------- Sticky process: light the active step ---------- */
-    var steps = document.querySelectorAll('.step');
-    if (steps.length && !reduced && 'IntersectionObserver' in window) {
-      var sio = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          entry.target.classList.toggle('lit', entry.isIntersecting);
-        });
-      }, { threshold: 0.55 });
-      steps.forEach(function (s) { sio.observe(s); });
-    } else {
-      steps.forEach(function (s) { s.classList.add('lit'); });
+    /* ---------- Sticky process: scroll-driven rail + progressive reveal ---------- */
+    var steps = Array.prototype.slice.call(document.querySelectorAll('.step'));
+    if (steps.length) {
+      var railFill = document.getElementById('stepsFill');
+      var railEl2  = document.querySelector('.steps-rail');
+      var curEl    = document.getElementById('stepCur');
+
+      if (reduced) {
+        steps.forEach(function (s) { s.classList.add('lit'); });
+        if (railFill) railFill.style.height = '100%';
+      } else {
+        var ticking = false;
+        var lastIdx = -1;
+
+        function paint() {
+          ticking = false;
+          var focus = window.innerHeight * 0.46;
+          var active = -1;
+
+          /* the last step whose dot has risen above the focus line */
+          for (var i = 0; i < steps.length; i++) {
+            var r = steps[i].getBoundingClientRect();
+            if (r.top + 52 <= focus) active = i; else break;
+          }
+          /* before the first dot crosses, treat step one as active once it is on screen */
+          if (active < 0 && steps[0].getBoundingClientRect().top < window.innerHeight * 0.85) active = 0;
+
+          for (var j = 0; j < steps.length; j++) {
+            steps[j].classList.toggle('lit', j === active);
+            steps[j].classList.toggle('seen', j < active);
+          }
+
+          if (railFill && railEl2 && active >= 0) {
+            var railTop = railEl2.getBoundingClientRect().top;
+            var dotY = steps[active].getBoundingClientRect().top + 52;
+            var h = Math.max(0, Math.min(railEl2.offsetHeight, dotY - railTop));
+            railFill.style.height = h + 'px';
+          } else if (railFill) {
+            railFill.style.height = '0px';
+          }
+
+          if (curEl && active >= 0 && active !== lastIdx) {
+            lastIdx = active;
+            curEl.textContent = ('0' + (active + 1)).slice(-2);
+          }
+        }
+
+        function onScroll() {
+          if (!ticking) { ticking = true; requestAnimationFrame(paint); }
+        }
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onScroll);
+        paint();
+      }
     }
 
     /* ---------- Accordion ---------- */

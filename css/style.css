@@ -1598,3 +1598,111 @@ section { position: relative; }
 .phero .eyebrow,
 .section--ink .eyebrow,
 .cta-band .eyebrow { color: var(--gold-bright); }
+
+/* ==========================================================================
+   Cinematic process section — ambient light, scroll rail, progressive reveal
+   ========================================================================== */
+.process { position: relative; overflow: hidden; isolation: isolate; }
+.process > .wrap { position: relative; z-index: 3; }
+
+.process-glow {
+  position: absolute; inset: -25% -12%; z-index: 1; pointer-events: none;
+  background:
+    radial-gradient(40% 44% at 74% 26%, rgba(142,31,47,0.30), transparent 70%),
+    radial-gradient(34% 38% at 14% 80%, rgba(154,107,30,0.18), transparent 70%);
+  animation: processDrift 26s ease-in-out infinite alternate;
+  will-change: transform;
+}
+@keyframes processDrift {
+  from { transform: translate3d(-2%, -1.5%, 0) scale(1); }
+  to   { transform: translate3d(3%, 2%, 0) scale(1.10); }
+}
+.process-grain {
+  position: absolute; inset: 0; z-index: 2; pointer-events: none; opacity: 0.30;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+/* Step counter under the CTA */
+.step-count {
+  margin-top: 46px; display: flex; align-items: baseline; gap: 2px;
+  font-family: var(--display); line-height: 1;
+}
+.step-count b {
+  font-size: 3.1rem; font-weight: 600; color: var(--gold-bright);
+  font-variation-settings: 'SOFT' 10, 'opsz' 40;
+  text-shadow: 0 0 26px rgba(217,89,106,0.45);
+}
+.step-count span { font-size: 1.25rem; color: var(--on-ink-soft); }
+
+/* Rail */
+.steps { position: relative; }
+.steps-rail {
+  position: absolute; left: 10px; top: 40px; bottom: 40px; width: 1px;
+  background: rgba(245,239,233,0.13); z-index: 1;
+}
+.steps-rail i {
+  position: absolute; left: -1px; top: 0; display: block;
+  width: 3px; height: 0; border-radius: 3px;
+  background: linear-gradient(180deg, var(--gold-bright), var(--gold));
+  box-shadow: 0 0 16px rgba(217,89,106,0.65);
+  transition: height 0.45s var(--ease-out);
+}
+
+/* Steps */
+.process .step {
+  position: relative; z-index: 2;
+  grid-template-columns: 88px minmax(0, 1fr);
+  gap: 26px;
+  padding: 40px 0;
+  opacity: 0.26;
+  transform: translateY(14px);
+  transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+}
+.process .step.seen { opacity: 0.5; transform: none; }
+.process .step.lit  { opacity: 1;   transform: none; }
+
+.process .step::before {
+  content: ''; position: absolute; left: 5px; top: 52px; z-index: 3;
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--ink); border: 1px solid rgba(245,239,233,0.32);
+  transition: background 0.45s var(--ease-out), border-color 0.45s var(--ease-out),
+              box-shadow 0.45s var(--ease-out), transform 0.45s var(--ease-out);
+}
+.process .step.seen::before { background: var(--gold); border-color: var(--gold); }
+.process .step.lit::before {
+  background: var(--gold-bright); border-color: var(--gold-bright);
+  transform: scale(1.25);
+  box-shadow: 0 0 0 6px rgba(217,89,106,0.16), 0 0 18px rgba(217,89,106,0.75);
+}
+
+.process .step-n {
+  font-family: var(--display); font-size: clamp(1.7rem, 2.6vw, 2.3rem);
+  font-weight: 500; line-height: 1; letter-spacing: 0;
+  text-align: right; padding-top: 2px;
+  color: rgba(245,239,233,0.24);
+  transition: color 0.55s var(--ease-out), text-shadow 0.55s var(--ease-out);
+}
+.process .step.lit .step-n {
+  color: var(--gold-bright); text-shadow: 0 0 22px rgba(217,89,106,0.45);
+}
+.process .step h3 {
+  font-size: 1.42rem;
+  transition: letter-spacing 0.6s var(--ease-out);
+}
+.process .step.lit h3 { letter-spacing: -0.012em; }
+.process .step p { font-size: 0.97rem; line-height: 1.72; }
+
+@media (max-width: 760px) {
+  .process .step { grid-template-columns: 56px minmax(0, 1fr); gap: 16px; padding: 30px 0; }
+  .process .step::before { left: 2px; top: 42px; }
+  .steps-rail { left: 7px; }
+  .step-count { margin-top: 32px; }
+  .step-count b { font-size: 2.4rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .process-glow { animation: none; }
+  .process .step { opacity: 1; transform: none; }
+  .steps-rail i { transition: none; }
+}
