@@ -1706,3 +1706,118 @@ section { position: relative; }
   .process .step { opacity: 1; transform: none; }
   .steps-rail i { transition: none; }
 }
+
+/* ==========================================================================
+   Selected work — twin cinematic marquees on a dark stage
+   ========================================================================== */
+.shelf-stage {
+  position: relative;
+  margin-top: 52px;
+  padding: 54px 0 46px;
+  border-radius: 16px;
+  background: linear-gradient(170deg, #1d1713 0%, #17120f 55%, #120e0c 100%);
+  box-shadow: 0 40px 90px -40px rgba(23,18,15,0.65), inset 0 1px 0 rgba(245,239,233,0.06);
+  overflow: hidden;
+  isolation: isolate;
+}
+.stage-glow {
+  position: absolute; inset: -30% -10%; z-index: 1; pointer-events: none;
+  background:
+    radial-gradient(38% 50% at 20% 18%, rgba(142,31,47,0.34), transparent 68%),
+    radial-gradient(34% 46% at 82% 86%, rgba(154,107,30,0.20), transparent 70%);
+  animation: stageDrift 30s ease-in-out infinite alternate;
+  will-change: transform;
+}
+@keyframes stageDrift {
+  from { transform: translate3d(2%, 1%, 0) scale(1.04); }
+  to   { transform: translate3d(-3%, -2%, 0) scale(1); }
+}
+.stage-grain {
+  position: absolute; inset: 0; z-index: 2; pointer-events: none; opacity: 0.26;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+/* Rows */
+.mq {
+  position: relative; z-index: 3;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+}
+.mq + .mq { margin-top: 38px; }
+.mq-track {
+  display: flex; gap: 26px; width: max-content;
+  animation: mqLeft var(--dur, 64s) linear infinite;
+  will-change: transform;
+}
+.mq--right .mq-track { animation-name: mqRight; }
+@keyframes mqLeft  { from { transform: translate3d(0,0,0); }      to { transform: translate3d(-50%,0,0); } }
+@keyframes mqRight { from { transform: translate3d(-50%,0,0); }   to { transform: translate3d(0,0,0); } }
+
+.shelf-stage:hover .mq-track,
+.shelf-stage:focus-within .mq-track { animation-play-state: paused; }
+
+/* Cards */
+.bk { width: 186px; flex: 0 0 auto; }
+.bk-cover {
+  position: relative; overflow: hidden;
+  aspect-ratio: 5 / 7;
+  border-radius: 2px 6px 6px 2px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  padding: 20px 17px;
+  box-shadow: 0 22px 44px -18px rgba(0,0,0,0.75), inset 0 0 0 1px rgba(255,255,255,0.05);
+  transition: transform 0.55s var(--ease-out), box-shadow 0.55s var(--ease-out);
+}
+.bk-spine {
+  position: absolute; left: 0; top: 0; bottom: 0; width: 13px;
+  background: linear-gradient(90deg, rgba(0,0,0,0.42), rgba(255,255,255,0.09) 62%, rgba(0,0,0,0.16));
+}
+.bk-sheen {
+  position: absolute; inset: 0;
+  background: linear-gradient(118deg, transparent 38%, rgba(255,255,255,0.16) 50%, transparent 62%);
+  transform: translateX(-120%);
+  transition: transform 0.85s var(--ease-out);
+}
+.bk:hover .bk-cover {
+  transform: translateY(-12px) scale(1.045);
+  box-shadow: 0 38px 62px -20px rgba(0,0,0,0.85), inset 0 0 0 1px rgba(255,255,255,0.1);
+}
+.bk:hover .bk-sheen { transform: translateX(120%); }
+
+.bk-cover i {
+  font-style: normal; font-size: 0.6rem; letter-spacing: 0.17em;
+  text-transform: uppercase; opacity: 0.68; padding-left: 8px;
+}
+.bk-cover b {
+  font-family: var(--display); font-size: 1.04rem; font-weight: 600;
+  line-height: 1.2; padding-left: 8px;
+  font-variation-settings: 'SOFT' 20, 'opsz' 14;
+}
+.bk-cover u {
+  text-decoration: none; font-size: 0.64rem; letter-spacing: 0.1em;
+  text-transform: uppercase; opacity: 0.6; padding-left: 8px; margin-top: 5px;
+  display: block;
+}
+.bk-meta { padding: 13px 2px 0; }
+.bk-meta strong {
+  display: block; font-family: var(--display); font-size: 0.93rem;
+  color: var(--on-ink); font-weight: 500;
+}
+.bk-meta span {
+  display: block; margin-top: 3px; font-size: 0.73rem;
+  letter-spacing: 0.04em; color: var(--gold-bright); opacity: 0.85;
+}
+
+@media (max-width: 700px) {
+  .shelf-stage { padding: 36px 0 32px; border-radius: 12px; }
+  .bk { width: 142px; }
+  .mq + .mq { margin-top: 26px; }
+  .mq-track { gap: 18px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage-glow { animation: none; }
+  .mq { overflow-x: auto; -webkit-mask-image: none; mask-image: none; }
+  .mq-track { animation: none; }
+}
