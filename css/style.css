@@ -11,8 +11,8 @@
 
   /* Paper — warm white, barely tinted, not cream */
   --paper:          #fcfaf7;
-  --paper-2:        #f5efe7;
-  --paper-3:        #e8dfd3;
+  --paper-2:        #efe9dc;
+  --paper-3:        #e3dacb;
 
   /* Gold — the brand accent, used sparingly and with intent */
   --gold:           #8e1f2f;
@@ -2226,8 +2226,8 @@ input[type="range"]#wc { width: 100%; accent-color: var(--gold); height: 26px; c
 .tart-wash {
   position: absolute; inset: -8% -6%; z-index: 0; border-radius: 50%;
   background:
-    radial-gradient(48% 46% at 62% 30%, rgba(142,31,47,0.16), transparent 70%),
-    radial-gradient(42% 40% at 24% 76%, rgba(154,107,30,0.14), transparent 72%);
+    radial-gradient(46% 44% at 64% 28%, rgba(142,31,47,0.11), transparent 72%),
+    radial-gradient(44% 42% at 26% 74%, rgba(154,107,30,0.16), transparent 74%);
   filter: blur(6px);
 }
 .tart-lines { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
