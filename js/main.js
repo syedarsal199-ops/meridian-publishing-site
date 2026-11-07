@@ -410,6 +410,81 @@
       items.forEach(function (el) { pio.observe(el); });
     })();
 
+    /* ---------- Service catalogue ---------- */
+    (function () {
+      var list = document.getElementById('catList');
+      if (!list) return;
+
+      /* [slug, name, blurb, coverClass, f1, f1label, f2, f2label, f3, f3label] */
+      var CAT = [["book-ghostwriting", "Book Ghostwriting", "A professional writer captures your voice and delivers a finished manuscript, chapter by chapter.", "c-memoir", "10–16 wks", "Typical manuscript timeline", "22 avg", "Recorded interviews per book", "100%", "Copyright retained by you"], ["memoir-writing", "Memoir & Life Story", "Decades of memory, interviews and half-written notes shaped into one readable life story.", "c-memoir", "12–18 wks", "Typical memoir timeline", "30+", "Hours of interviews", "3 gen.", "Family histories handled"], ["business-book-writing", "Business Books", "A framework worth giving away, built from your own expertise and written to be quoted.", "c-business", "8–12 wks", "Founder sprint timeline", "40–55k", "Typical word count", "1", "Framework the book is built on"], ["fiction-ghostwriting", "Fiction Ghostwriting", "Novels and series written to genre convention by writers who read what your readers read.", "c-fantasy", "16–24 wks", "Typical novel timeline", "70–95k", "Standard novel length", "6", "Genres we write in"], ["book-editing", "Editing & Proofreading", "Structure first, then sentences. A full editorial letter, then tracked changes and a style sheet.", "c-nonfic", "3 passes", "Developmental, line, copy", "2–5 wks", "Turnaround by length", "1", "Call with your editor included"], ["book-cover-design", "Cover Design", "Three concepts tested at thumbnail size, then a full print wrap and ebook files.", "c-thriller", "3", "Original concepts", "1 sec", "To earn the click", "Unlimited", "Revisions on your chosen route"], ["book-formatting", "Formatting & Typesetting", "A print interior that looks typeset and a reflowable EPUB validated for every retailer.", "c-nonfic", "5+", "Retailer specs matched", "1st time", "Validation pass rate", "EPUB 3", "Accessible ebook standard"], ["self-publishing", "Self & Amazon Publishing", "ISBNs, metadata, categories, keywords and upload across every major retail platform.", "c-business", "5+", "Retail channels", "10", "Keywords researched", "Your name", "On the ISBN and accounts"], ["audiobook-production", "Audiobook Production", "Narrator casting, studio recording, mastering and distribution to Audible and beyond.", "c-selfhelp", "6–9 hrs", "Typical finished runtime", "3–5 wks", "Production time", "ACX", "Mastering standard met"], ["book-marketing", "Book Marketing", "A launch built around real readers: ads, reviewer outreach, and a plan past week one.", "c-romance", "90 days", "Core campaign length", "Weekly", "Ad performance reporting", "40+", "Podcast and press contacts"], ["author-website", "Author Websites", "A site that sells the book and captures emails, built to be updated without a developer.", "c-business", "2–3 wks", "Design to launch", "<1.5s", "Target load time", "You", "Own the domain and list"], ["book-printing", "Book Printing", "Short runs and print-on-demand, with paper stock and finish chosen for the book you made.", "c-memoir", "250+", "Offset break-even point", "Free", "Physical proof before any run", "48 hrs", "POD dispatch time"]];
+
+      var items  = Array.prototype.slice.call(list.querySelectorAll('.cat-item')),
+          cover  = document.getElementById('catCover'),
+          kind   = document.getElementById('catKind'),
+          spine  = document.getElementById('catSpine'),
+          idx    = document.getElementById('catIdx'),
+          title  = document.getElementById('catTitle'),
+          desc   = document.getElementById('catDesc'),
+          facts  = document.getElementById('catFacts'),
+          link   = document.getElementById('catLink'),
+          stage  = document.querySelector('.cat-stage');
+
+      var cur = -1, hoverTimer = null;
+
+      function show(n) {
+        if (n === cur || !CAT[n]) return;
+        cur = n;
+        var d = CAT[n];
+
+        items.forEach(function (b, i) {
+          b.classList.toggle('on', i === n);
+          b.setAttribute('aria-current', i === n ? 'true' : 'false');
+        });
+
+        stage.classList.remove('swap');
+        /* force reflow so the animation restarts */
+        void stage.offsetWidth;
+        stage.classList.add('swap');
+
+        cover.className = 'cat-cover ' + d[3];
+        kind.textContent  = d[1];
+        spine.textContent = d[1];
+        idx.textContent   = ('0' + (n + 1)).slice(-2);
+        title.textContent = d[1];
+        desc.textContent  = d[2];
+        facts.innerHTML =
+            '<div><dt>' + d[5] + '</dt><dd>' + d[4] + '</dd></div>'
+          + '<div><dt>' + d[7] + '</dt><dd>' + d[6] + '</dd></div>'
+          + '<div><dt>' + d[9] + '</dt><dd>' + d[8] + '</dd></div>';
+        link.setAttribute('href', d[0] + '.html');
+      }
+
+      items.forEach(function (b, i) {
+        b.addEventListener('mouseenter', function () {
+          clearTimeout(hoverTimer);
+          hoverTimer = setTimeout(function () { show(i); }, 70);
+        });
+        b.addEventListener('focus', function () { show(i); });
+        b.addEventListener('click', function () {
+          var panel = document.getElementById('catPanel');
+          var panelHidden = !panel || getComputedStyle(panel).display === 'none';
+          if (panelHidden || cur === i) { window.location.href = CAT[i][0] + '.html'; }
+          else { show(i); }
+        });
+        b.addEventListener('keydown', function (e) {
+          var next = null;
+          if (e.key === 'ArrowDown') next = (i + 1) % items.length;
+          if (e.key === 'ArrowUp')   next = (i - 1 + items.length) % items.length;
+          if (next !== null) { e.preventDefault(); items[next].focus(); }
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault(); window.location.href = CAT[i][0] + '.html';
+          }
+        });
+      });
+
+      show(0);
+    })();
+
     /* ---------- Accordion ---------- */
     document.querySelectorAll('.faq-q').forEach(function (btn) {
       btn.addEventListener('click', function () {
