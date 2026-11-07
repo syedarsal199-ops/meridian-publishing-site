@@ -2087,3 +2087,58 @@ input[type="range"]#wc { width: 100%; accent-color: var(--gold); height: 26px; c
 }
 .rev-dia { background-size: 19px 9px; }
 .rev-stars { background-size: 16px 8px; background-position: left center; }
+
+/* ==========================================================================
+   Footer wordmark — oversized metallic lockup
+   ========================================================================== */
+.site-foot { position: relative; overflow: hidden; padding-bottom: 0; }
+
+.foot-mark {
+  position: relative;
+  margin-top: clamp(26px, 4vw, 48px);
+  padding: 0 clamp(16px, 3vw, 40px);
+  line-height: 0;
+}
+.foot-mark svg {
+  display: block; width: 100%; height: auto;
+  /* the glyph bottoms sit just past the edge, so the lockup reads as cropped */
+  margin-bottom: clamp(-9px, -0.55vw, -4px);
+}
+.foot-mark text {
+  font-family: var(--display), Georgia, serif;
+  font-weight: 400;
+  font-size: 150px;
+  letter-spacing: -0.015em;
+  font-variation-settings: 'SOFT' 0, 'WONK' 0, 'opsz' 144;
+}
+
+/* back-to-top diamond, bottom right of the wordmark */
+.foot-top {
+  position: absolute; right: clamp(16px, 3vw, 40px); bottom: clamp(26px, 4vw, 54px);
+  width: clamp(44px, 5vw, 62px); aspect-ratio: 1;
+  display: grid; place-items: center;
+  border: 1px solid rgba(199,154,66,0.5); border-radius: 50%;
+  background: rgba(23,18,15,0.55); backdrop-filter: blur(3px);
+  transition: border-color 0.4s var(--ease), background 0.4s var(--ease);
+}
+.foot-top i {
+  width: 12px; height: 12px; border: 1px solid #c79a42;
+  transform: rotate(45deg);
+  transition: transform 0.55s var(--ease-out), background 0.4s var(--ease);
+}
+.foot-top:hover { border-color: #c79a42; background: rgba(199,154,66,0.14); }
+.foot-top:hover i { transform: rotate(135deg); background: #c79a42; }
+
+@media (max-width: 620px) {
+  .foot-mark svg { margin-bottom: -3px; }
+  .foot-top { width: 42px; bottom: 18px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .foot-top i, .foot-top { transition: none; }
+}
+
+/* footer columns: single column on phones, and let the long email wrap */
+@media (max-width: 680px) {
+  .foot-grid { grid-template-columns: minmax(0, 1fr); gap: 30px; }
+}
+.foot-grid ul li, .foot-grid ul li a { overflow-wrap: anywhere; }
