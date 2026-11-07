@@ -390,6 +390,26 @@
       }
     })();
 
+    /* ---------- Pact clauses: staggered reveal ---------- */
+    (function () {
+      var items = document.querySelectorAll('.pact-item');
+      if (!items.length) return;
+      if (reduced || !('IntersectionObserver' in window)) {
+        items.forEach(function (el) { el.classList.add('in'); });
+        return;
+      }
+      var pio = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          var el = e.target;
+          var i = Array.prototype.indexOf.call(items, el);
+          setTimeout(function () { el.classList.add('in'); }, i * 130);
+          pio.unobserve(el);
+        });
+      }, { threshold: 0.2, rootMargin: '0px 0px -6% 0px' });
+      items.forEach(function (el) { pio.observe(el); });
+    })();
+
     /* ---------- Accordion ---------- */
     document.querySelectorAll('.faq-q').forEach(function (btn) {
       btn.addEventListener('click', function () {
