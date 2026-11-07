@@ -2149,7 +2149,7 @@ input[type="range"]#wc { width: 100%; accent-color: var(--gold); height: 26px; c
 /* guard: a count-up <span> inside <b> must not inherit the small label style */
 .stat b span { font: inherit; color: inherit; letter-spacing: inherit; }
 
-.colophon-band { background: var(--paper-2); }
+.colophon-band { background: var(--paper); }
 .colophon {
   display: grid;
   grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
@@ -2226,8 +2226,8 @@ input[type="range"]#wc { width: 100%; accent-color: var(--gold); height: 26px; c
 .tart-wash {
   position: absolute; inset: -8% -6%; z-index: 0; border-radius: 50%;
   background:
-    radial-gradient(46% 44% at 64% 28%, rgba(142,31,47,0.11), transparent 72%),
-    radial-gradient(44% 42% at 26% 74%, rgba(154,107,30,0.16), transparent 74%);
+    radial-gradient(46% 44% at 64% 28%, rgba(142,31,47,0.09), transparent 72%),
+    radial-gradient(44% 42% at 26% 74%, rgba(154,107,30,0.13), transparent 74%);
   filter: blur(6px);
 }
 .tart-lines { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
