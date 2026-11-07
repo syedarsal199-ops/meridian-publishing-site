@@ -2687,3 +2687,83 @@ input[type="range"]#wc { width: 100%; accent-color: var(--gold); height: 26px; c
   font-size: 0.84rem; line-height: 1.6; color: var(--text-faint); font-style: italic;
 }
 @media (max-width: 760px) { .diffs { grid-template-columns: minmax(0, 1fr); } }
+
+/* ==========================================================================
+   Art direction pass — break the repeating header formula and the container
+   ========================================================================== */
+
+/* paper tooth on the light bands, so white is never dead flat */
+.band { position: relative; }
+.band::before {
+  content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  opacity: 0.5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23p)' opacity='0.035'/%3E%3C/svg%3E");
+}
+.band > * { position: relative; z-index: 1; }
+
+/* ---- oversized numeral opener (services) ---- */
+.bighead {
+  display: grid; grid-template-columns: auto minmax(0, 1fr);
+  gap: clamp(18px, 3vw, 46px); align-items: start;
+}
+.bighead-fig {
+  font-family: var(--display); font-weight: 500;
+  font-size: clamp(5.5rem, 15vw, 15rem); line-height: 0.76;
+  letter-spacing: -0.05em;
+  font-variation-settings: 'SOFT' 0, 'WONK' 1, 'opsz' 144;
+  background: linear-gradient(174deg, var(--ink) 18%, var(--gold) 86%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+  margin-top: -0.06em;
+}
+.bighead-copy { padding-top: clamp(4px, 1.4vw, 18px); }
+.bighead-h {
+  font-family: var(--display); font-weight: 600;
+  font-size: clamp(1.8rem, 4.4vw, 3.5rem); line-height: 1.02;
+  letter-spacing: -0.026em; color: var(--ink);
+  font-variation-settings: 'SOFT' 20, 'opsz' 72;
+}
+.bighead-copy p {
+  margin-top: 20px; max-width: 54ch;
+  font-size: 1rem; line-height: 1.75; color: var(--text-soft);
+}
+
+/* ---- full-bleed work band, label offset off-axis ---- */
+.workband { padding-bottom: clamp(48px, 6vw, 86px); }
+.workhead {
+  max-width: 640px;
+  margin: 0 0 clamp(26px, 3vw, 40px) auto;   /* pushed right, off the common left edge */
+  text-align: right;
+}
+.workhead h2 {
+  font-family: var(--display); font-weight: 500;
+  font-size: clamp(1.7rem, 3.6vw, 2.9rem); line-height: 1.08;
+  letter-spacing: -0.022em; color: var(--ink);
+}
+.workhead h2 em { font-style: italic; color: var(--gold); }
+.workhead p {
+  margin-top: 14px; margin-left: auto; max-width: 46ch;
+  font-size: 0.97rem; line-height: 1.7; color: var(--text-soft);
+}
+/* break the container: the shelf runs the full width of the viewport */
+.workband .shelf-stage {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  border-radius: 0;
+  box-shadow: 0 0 0 1px rgba(23,18,15,0.05);
+}
+
+@media (max-width: 760px) {
+  .bighead { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .bighead-fig { font-size: clamp(4.5rem, 24vw, 8rem); }
+  .workhead { text-align: left; margin-right: auto; }
+  .workhead p { margin-left: 0; }
+}
+
+/* vertical rhythm: sections should not all breathe identically */
+.workband { padding-bottom: clamp(30px, 3.4vw, 48px); }
+.workband .shelf-stage { margin-top: 0; }
+.colophon-band { padding-top: clamp(44px, 5vw, 70px); }
+.catalogue-band { padding-bottom: clamp(44px, 5vw, 76px); }
+.diff-band { padding-top: clamp(56px, 6.5vw, 96px); }
